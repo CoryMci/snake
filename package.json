@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "jest": "^29.3.0"
+  },
+    "scripts": {
+      "test": "jest",
+      "jwatch": "jest --watch *.js"
+    }
+}
