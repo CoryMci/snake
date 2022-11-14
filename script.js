@@ -183,33 +183,39 @@ const dom = function () {
   return { refresh, generateBoard };
 };
 
-const game = function (gameboard = [10, 10], gameTick = 1000) {
+const game = function (gameboard = [10, 10], gameTick = 300) {
   let player = snake();
   let theDom = dom();
+  let nextTurn = 0;
   theDom.generateBoard(player);
   theDom.refresh(player);
-
+  let tick = setInterval(() => {
+    //new game tick
+    player.turn(nextTurn);
+    player = player.advance();
+    theDom.generateBoard(player);
+    theDom.refresh(player);
+  }, gameTick);
   const controller = function () {
     document.addEventListener("keydown", (e) => {
-      if (e.key == "ArrowRight") {
-        if (player.turn(0)) {
-          player = player.advance();
+      if (
+        e.key == "ArrowRight" ||
+        e.key == "ArrowUp" ||
+        e.key == "ArrowLeft" ||
+        e.key == "ArrowDown"
+      ) {
+        if (e.key == "ArrowRight") {
+          nextTurn = 0;
+        } else if (e.key == "ArrowUp") {
+          nextTurn = 1;
+        } else if (e.key == "ArrowLeft") {
+          nextTurn = 2;
+        } else if (e.key == "ArrowDown") {
+          nextTurn = 3;
         }
-      } else if (e.key == "ArrowUp") {
-        if (player.turn(1)) {
-          player = player.advance();
-        }
-      } else if (e.key == "ArrowLeft") {
-        if (player.turn(2)) {
-          player = player.advance();
-        }
-      } else if (e.key == "ArrowDown") {
-        if (player.turn(3)) {
-          player = player.advance();
-        }
+        theDom.generateBoard(player);
+        theDom.refresh(player);
       }
-      theDom.generateBoard(player);
-      theDom.refresh(player);
     });
   };
 
